@@ -47,6 +47,7 @@ local.properties
 .buildpath
 
 index/*
+dist/
 dist/*
 fwdindex/*
 index_nofilter/*
