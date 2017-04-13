@@ -136,6 +136,10 @@ public class SearchManager {
     private static final Logger logger = LogManager
             .getLogger(SearchManager.class);
     public static boolean FATAL_ERROR;
+    public enum TokenOrdering {
+        FREQUENCY, NATURAL, MIXED
+    }
+    public static TokenOrdering tokenOrdering = TokenOrdering.FREQUENCY;
 
     public SearchManager(String[] args) throws IOException {
         SearchManager.clonePairsCount = 0;
@@ -180,6 +184,8 @@ public class SearchManager {
                     .parseInt(properties.getProperty("BTFIQ_THREADS", "1"));
             this.isSharding = Boolean
                     .parseBoolean(properties.getProperty("IS_SHARDING"));
+            SearchManager.tokenOrdering = TokenOrdering
+                    .valueOf(properties.getProperty("TOKEN_ORDERING", "FREQUENCY"));
 
         } catch (NumberFormatException e) {
             logger.error(e.getMessage() + ", exiting now",e);

@@ -241,20 +241,20 @@ public class Util {
     // This cache is shared by all threads that call sortBag
     final static Map<String, Long> cache = lruCache(500000);
 
-    public static void sortBag(final Bag bag) {
-        List<TokenFrequency> bagAsList = new ArrayList<TokenFrequency>(bag);
+    public static void sortBagByFrequency(final Bag bag) {
+        List<TokenFrequency> bagAsList = new ArrayList<>(bag);
         logger.debug("bag to sort: "+bag);
         try {
             Collections.sort(bagAsList, new Comparator<TokenFrequency>() {
-                public int compare(TokenFrequency tfFirst,
-                        TokenFrequency tfSecond) {
+                @Override
+                public int compare(TokenFrequency tfFirst, TokenFrequency tfSecond) {
                     Long frequency1 = 0l;
                     Long frequency2 = 0l;
                     String k1 = tfFirst.getToken().getValue();
                     String k2 = tfSecond.getToken().getValue();
                     if (cache.containsKey(k1)) {
                         frequency1 = cache.get(k1);
-                        if(null==frequency1){
+                        if (null == frequency1) {
                             logger.warn("freq1 null from cache");
                             frequency1 = SearchManager.gtpmSearcher
                                     .getFrequency(k1);
@@ -267,7 +267,7 @@ public class Util {
                     }
                     if (cache.containsKey(k2)) {
                         frequency2 = cache.get(k2);
-                        if(null==frequency2){
+                        if (null == frequency2) {
                             logger.warn("freq2 null from cache");
                             frequency2 = SearchManager.gtpmSearcher
                                     .getFrequency(k2);
@@ -278,15 +278,40 @@ public class Util {
                                 .getFrequency(k2);
                         cache.put(k2, frequency2);
                     }
-                    if(null==frequency1 || null==frequency2){
-                        logger.warn("k1:"+k1+ " frequency1: "+ frequency1 + ", k2: "+k2 + " frequency2: "+ frequency2 + "bag: "+ bag) ;
+                    int result = 0;
+                    if (frequency1 == -1 || frequency2 == -1) {
+                        logger.warn("k1:" + k1 + " frequency1: " + frequency1 + ", k2: " + k2 + " frequency2: " + frequency2 + "bag: " + bag);
+                    } else {
+                        result = frequency1.compareTo(frequency2);
                     }
-                    int result = frequency1.compareTo(frequency2);
                     if (result == 0) {
                         return k1.compareTo(k2);
                     } else {
                         return result;
                     }
+                }
+            });
+            bag.clear();
+            for (TokenFrequency tf : bagAsList) {
+                bag.add(tf);
+            }
+        } catch (NullPointerException e) {
+            logger.error("NPE caught while sorting, ", e);
+            SearchManager.FATAL_ERROR=true;
+        }
+
+    }
+
+    public static void sortBagNatural(final Bag bag) {
+        List<TokenFrequency> bagAsList = new ArrayList<>(bag);
+        logger.debug("bag to sort: "+bag);
+        try {
+            Collections.sort(bagAsList, new Comparator<TokenFrequency>() {
+                @Override
+                public int compare(TokenFrequency tfFirst, TokenFrequency tfSecond) {
+                    String k1 = tfFirst.getToken().getValue();
+                    String k2 = tfSecond.getToken().getValue();
+                    return k1.compareTo(k2);
                 }
             });
             bag.clear();
