@@ -78,7 +78,7 @@ public class WordFrequencyStore implements ITokensFileProcessor {
                 logger.debug("empty block, ignoring");
             } else {
                 logger.debug("not adding tokens of line to WFM, REASON: " + bag.getFunctionId() + ", " + bag.getId()
-                                + ", size: " + bag.getSize() + " (max tokens is " + SearchManager.max_tokens + ")");
+                                + ", size: " + bag.getSize() + " (min/max tokens = " + SearchManager.min_tokens + "/" + SearchManager.max_tokens + ")");
             }
         }
         this.lineNumber++;
@@ -166,7 +166,7 @@ public class WordFrequencyStore implements ITokensFileProcessor {
         int count = 0;
         for (Entry<String, Long> entry : this.wordFreq.entrySet()) {
 
-            long oldfreq = wfmSearcher.getFrequency(entry.getKey());
+            long oldfreq = wfmSearcher.getFrequency(entry.getKey(), true);
             if (oldfreq < 0)
                 oldfreq = 0;
 

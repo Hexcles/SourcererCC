@@ -280,7 +280,7 @@ public class Util {
                     }
                     int result = 0;
                     if (frequency1 == -1 || frequency2 == -1) {
-                        logger.warn("k1:" + k1 + " frequency1: " + frequency1 + ", k2: " + k2 + " frequency2: " + frequency2 + "bag: " + bag);
+                        logger.warn("k1: " + k1 + " frequency1: " + frequency1 + ", k2: " + k2 + " frequency2: " + frequency2 + "bag: " + bag);
                     } else {
                         result = frequency1.compareTo(frequency2);
                     }

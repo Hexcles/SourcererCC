@@ -131,6 +131,10 @@ public class CodeSearcher {
     }
 
     public long getFrequency(String key) {
+        return getFrequency(key, false);
+    }
+
+    public long getFrequency(String key, boolean ignoreMissing) {
         CustomCollectorFwdIndex result = new CustomCollectorFwdIndex();
         Query query = null;
         long frequency = -1l;
@@ -148,7 +152,8 @@ public class CodeSearcher {
                 Document document = this.getDocument(blocks.get(0));
                 frequency = Long.parseLong(document.get("frequency"));
             }else{
-                logger.warn("number of blocks returend by gtpm: "+blocks.size()  + ", key is: "+ key + " query: "+ query);
+                if (!ignoreMissing)
+                    logger.warn("number of blocks returned by gtpm: "+blocks.size()  + ", key is: "+ key + " query: "+ query);
             }
         } catch (org.apache.lucene.queryparser.classic.ParseException e) {
             logger.warn("cannot parse (freq): " + key + ". Ignoring this.");
