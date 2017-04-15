@@ -140,7 +140,7 @@ public class CodeSearcher {
         long frequency = -1l;
         try {
             synchronized (this) {
-                query = queryParser.parse(key);
+                query = queryParser.parse("\"" + key + "\"");
             }
             /*
              * System.out.println("Searching for: " + query.toString(this.field)
