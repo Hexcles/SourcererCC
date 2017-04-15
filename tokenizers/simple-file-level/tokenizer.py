@@ -308,9 +308,9 @@ def process_project(project_path):
             G_project_counter.value += 1
 
     durations = [.0] * 6
-    with open(G_tokens_filename, 'a+') as tokens_file, \
-            open(G_bookkeeping_filename, 'a+') as bookkeeping_file, \
-            open(G_stats_filename, 'a+') as stats_file:
+    with open(G_tokens_filename, 'a') as tokens_file, \
+            open(G_bookkeeping_filename, 'a') as bookkeeping_file, \
+            open(G_stats_filename, 'a') as stats_file:
         os.path.walk(project_path, walk_directory,
                      (project_id, project_path,
                       tokens_file, bookkeeping_file, stats_file,
