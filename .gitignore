@@ -35,7 +35,6 @@ tmp/**/*
 *.idx
 *.orig
 build/
-build/*
 debug/
 local.properties
 .classpath
@@ -46,10 +45,8 @@ local.properties
 # PDT-specific
 .buildpath
 
-index/*
+index/
 dist/
-dist/*
-fwdindex/*
-index_nofilter/*
+fwdindex/
+index_nofilter/
 output*
-/bin/
