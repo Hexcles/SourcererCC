@@ -28,7 +28,8 @@ except ImportError:
 # parentID, blockID, file_path, file_hash, file_size, lines, LOC, SLOC, tokens_count_total, tokens_count_unique
 
 argparser = argparse.ArgumentParser(description='File-based tokenizer for SourcererCC.')
-argparser.add_argument('config', metavar='<PROJECT_LIST>', help='Path to config file')
+argparser.add_argument('project', metavar='<PROJECT_LIST>', help='Path to a project list file (one path per line)')
+argparser.add_argument('-c', dest='config', default='config.ini', help='Path to the config file (default=config.ini)')
 argparser.add_argument('-f', dest='force', action='store_true', default=False, help='Overwrite existing results')
 
 MULTIPLIER = 50000000
@@ -37,7 +38,6 @@ MULTIPLIER = 50000000
 # Main
 N_PROCESSES = 2
 PROJECTS_BATCH = 20
-FILE_projects_list = 'projects-list.txt'
 INTRA_PROJECT = True
 # Misc
 PATH_stats_file_folder = 'files_stats'
@@ -73,7 +73,6 @@ def read_config(config_file):
     conf = {}
     conf['N_PROCESSES'] = config.getint('Main', 'N_PROCESSES')
     conf['PROJECTS_BATCH'] = config.getint('Main', 'PROJECTS_BATCH')
-    conf['FILE_projects_list'] = config.get('Main', 'FILE_projects_list')
     conf['INTRA_PROJECT'] = config.get('Main', 'INTRA_PROJECT').strip().upper() == 'ON'
 
     conf['PATH_stats_file_folder'] = config.get('Misc', 'PATH_stats_file_folder')
@@ -93,13 +92,12 @@ def read_config(config_file):
 
 
 def apply_config(conf):
-    global N_PROCESSES, PROJECTS_BATCH, FILE_projects_list, INTRA_PROJECT
+    global N_PROCESSES, PROJECTS_BATCH, INTRA_PROJECT
     global PATH_stats_file_folder, PATH_bookkeeping_proj_folder, PATH_tokens_file_folder, PATH_logs
     global separators, comment_inline, comment_inline_pattern, comment_open_tag, comment_close_tag, comment_open_close_pattern, file_extensions
 
     N_PROCESSES = conf['N_PROCESSES']
     PROJECTS_BATCH = conf['PROJECTS_BATCH']
-    FILE_projects_list = conf['FILE_projects_list']
     INTRA_PROJECT = conf['INTRA_PROJECT']
 
     PATH_stats_file_folder = conf['PATH_stats_file_folder']
@@ -350,7 +348,7 @@ def main():
 
     print("*** Reading project list...")
     project_paths = []
-    with open(FILE_projects_list) as f:
+    with open(args.project, 'r') as f:
         for line in f:
             project_paths.append(line.strip())
 
