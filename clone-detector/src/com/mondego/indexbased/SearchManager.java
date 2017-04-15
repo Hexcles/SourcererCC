@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.mondego.indexbased;
 
@@ -362,6 +362,7 @@ public class SearchManager {
             logger.info(SearchManager.NODE_PREFIX + ", shutting down BTSQ, "
                     + (System.currentTimeMillis()));
             SearchManager.bagsToSortQueue.shutdown();
+            theInstance.bagsSortTime = System.currentTimeMillis() - begin_time;
             logger.info(SearchManager.NODE_PREFIX + "shutting down BTIIQ, "
                     + System.currentTimeMillis());
             SearchManager.bagsToInvertedIndexQueue.shutdown();
