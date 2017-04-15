@@ -46,7 +46,11 @@ local.properties
 .buildpath
 
 index/
+gtpmindex/
 dist/
 fwdindex/
 index_nofilter/
 output*
+output/
+input/
+SCC_LOGS/
