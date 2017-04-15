@@ -363,6 +363,8 @@ def main():
     result_iter = process_pool.imap_unordered(process_project, project_paths, PROJECTS_BATCH)
     for r in result_iter:
         project_count += r
+        sys.stdout.write('.' if r == 1 else 'x')
+    sys.stdout.write('\n')
 
     p_elapsed = dt.datetime.now() - p_start
     print("*** All done. %d/%d projects successfully processed within %s." %
