@@ -17,8 +17,7 @@ except ImportError:
 
 # OUTPUT FORMATS
 # TOKEN files: one line per block
-# parentID,blockID@#@[token@@::@@count,]*
-# e.g.: 1,2@#@for@@::@@1,"Fileset@@::@@1,perform@@::@@2,was@@::@@1,configured"@@::@@1,throw@@::@@1
+# parentID,blockID,tokens_count_total,tokens_count_unique,tokens_hash@#@token@@::@@count(,token@@::@@count)*
 # ------------
 # BOOKKEEPING files: one line per block
 # blockID,filepath,line_start,line_end
@@ -227,7 +226,7 @@ def process_file(file_string, file_size, file_path, project_id, file_id,
     (final_stats, final_tokens, file_parsing_times) = tokenize_files(file_string, comment_inline_pattern, comment_open_close_pattern, separators)
 
     (file_hash,lines,LOC,SLOC) = final_stats
-    (tokens_count_total,tokens_count_unique,token_hash,tokens) = final_tokens
+    (tokens_count_total,tokens_count_unique,tokens_hash,tokens) = final_tokens
 
     ww_time = dt.datetime.now()
     stats_file.write(','.join(
@@ -237,7 +236,8 @@ def process_file(file_string, file_size, file_path, project_id, file_id,
     w_time = dt.datetime.now() - ww_time
 
     ww_time = dt.datetime.now()
-    tokens_file.write('%d,%d@#@%s\n' % (project_id, file_id, tokens))
+    tokens_file.write('%d,%d,%d,%d,%s@#@%s\n' %
+                      (project_id, file_id, tokens_count_total, tokens_count_unique, tokens_hash, tokens))
     w_time += dt.datetime.now() - ww_time
 
     ww_time = dt.datetime.now()
@@ -364,6 +364,7 @@ def main():
     for r in result_iter:
         project_count += r
         sys.stdout.write('.' if r == 1 else 'x')
+        sys.stdout.flush()
     sys.stdout.write('\n')
 
     p_elapsed = dt.datetime.now() - p_start
