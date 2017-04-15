@@ -149,6 +149,7 @@ public class IndexMerger {
         EProperties properties = new EProperties();
         FileInputStream fis = null;
         IndexMerger.populateNodeDirs();
+        SearchManager.ROOT_DIR = System.getProperty("properties.rootDir");
         logger.info("reading Q values from properties file");
         String propertiesPath = System.getProperty("properties.location");
         logger.info("propertiesPath: " + propertiesPath);

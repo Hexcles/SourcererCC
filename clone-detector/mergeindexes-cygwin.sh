@@ -8,6 +8,6 @@ unixPATH=`pwd`
 echo $unixPATH
 p=`cygpath -aw $unixPATH/sourcerer-cc.properties`
 echo $p
-java -Dproperties.location="$p" -Xms6g -Xmx6g -XX:+UseCompressedOops -jar dist/indexbased.IndexMerger.jar
+java -Dproperties.rootDir="$unixPATH" -Dproperties.location="$p" -Xms6g -Xmx6g -XX:+UseCompressedOops -jar dist/indexbased.IndexMerger.jar
 
 
