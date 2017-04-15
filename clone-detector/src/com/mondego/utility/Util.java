@@ -278,12 +278,16 @@ public class Util {
                                 .getFrequency(k2);
                         cache.put(k2, frequency2);
                     }
+                    // We compare the frequency first, assuming unseen tokens have frequency=-1
+                    // (the default returned by gtpm when not found).  Hence, unseen tokens are
+                    // always put before seen tokens.
+                    // If the two tokens have the same frequency (including both are -1, i.e. both
+                    // are unseen), we compare the keys themselves lexicographically.
                     int result = 0;
                     if (frequency1 == -1 || frequency2 == -1) {
                         logger.warn("k1: " + k1 + " frequency1: " + frequency1 + ", k2: " + k2 + " frequency2: " + frequency2 + "bag: " + bag);
-                    } else {
-                        result = frequency1.compareTo(frequency2);
                     }
+                    result = frequency1.compareTo(frequency2);
                     if (result == 0) {
                         return k1.compareTo(k2);
                     } else {

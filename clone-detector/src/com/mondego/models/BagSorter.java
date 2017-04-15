@@ -62,10 +62,6 @@ public class BagSorter implements IListener, Runnable {
         case NATURAL:
             Util.sortBagNatural(bag);
             break;
-        case MIXED:
-            logger.error("Unimplemented token ordering");
-            SearchManager.FATAL_ERROR=true;
-            break;
     }
 	long estimatedTime = System.nanoTime() - startTime;
 	logger.info(SearchManager.NODE_PREFIX + " SB, Bag " + bag+ " in " + estimatedTime/1000 + " micros");

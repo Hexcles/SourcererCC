@@ -136,9 +136,7 @@ public class SearchManager {
     private static final Logger logger = LogManager
             .getLogger(SearchManager.class);
     public static boolean FATAL_ERROR;
-    public enum TokenOrdering {
-        FREQUENCY, NATURAL, MIXED
-    }
+    public enum TokenOrdering { FREQUENCY, NATURAL }
     public static TokenOrdering tokenOrdering = TokenOrdering.FREQUENCY;
 
     public SearchManager(String[] args) throws IOException {
