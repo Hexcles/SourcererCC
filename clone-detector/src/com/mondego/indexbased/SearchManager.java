@@ -89,7 +89,7 @@ public class SearchManager {
     private static final String ACTION_INIT = "init";
     int deletemeCounter = 0;
     public static double ramBufferSizeMB;
-    private long bagsSortTime;
+    private static long bagsSortTime;
     public static ThreadedChannel<String> queryLineQueue;
     public static ThreadedChannel<QueryBlock> queryBlockQueue;
     public static ThreadedChannel<QueryCandidates> queryCandidatesQueue;
@@ -151,7 +151,7 @@ public class SearchManager {
         this.timeTotal = 0;
         this.appendToExistingFile = true;
         SearchManager.ramBufferSizeMB = 100 * 1;
-        this.bagsSortTime = 0;
+        SearchManager.bagsSortTime = 0;
         SearchManager.ACTION = args[0];
         SearchManager.statusCounter = 0;
         SearchManager.globalWordFreqMap = new HashMap<String, Long>();
@@ -360,7 +360,6 @@ public class SearchManager {
             logger.info(SearchManager.NODE_PREFIX + ", shutting down BTSQ, "
                     + (System.currentTimeMillis()));
             SearchManager.bagsToSortQueue.shutdown();
-            theInstance.bagsSortTime = System.currentTimeMillis() - begin_time;
             logger.info(SearchManager.NODE_PREFIX + "shutting down BTIIQ, "
                     + System.currentTimeMillis());
             SearchManager.bagsToInvertedIndexQueue.shutdown();
@@ -684,7 +683,7 @@ public class SearchManager {
         header += this.timeSpentInProcessResult + ",";
         if (SearchManager.ACTION.equalsIgnoreCase("index")) {
             header += SearchManager.ACTION + ",";
-            header += this.bagsSortTime;
+            header += SearchManager.bagsSortTime;
         } else {
             header += SearchManager.ACTION;
         }
@@ -837,6 +836,10 @@ public class SearchManager {
                 completedNodeFile.delete();
             }
         }
+    }
+
+    public static synchronized void updateBagsSortTime(long num) {
+        SearchManager.bagsSortTime += num;
     }
 
     public static synchronized void updateNumCandidates(int num) {

@@ -19,6 +19,8 @@ public class BagSorter implements IListener, Runnable {
 
     @Override
     public void run() {
+        long timeMillisBeforeRun, timeMillisAfterRun;
+        timeMillisBeforeRun = System.currentTimeMillis();
         try {
             /*
              * System.out.println(SearchManager.NODE_PREFIX +
@@ -50,6 +52,8 @@ public class BagSorter implements IListener, Runnable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        timeMillisAfterRun = System.currentTimeMillis();
+        SearchManager.updateBagsSortTime(timeMillisAfterRun - timeMillisBeforeRun);
     }
 
     private void sortBag(Bag bag) throws InterruptedException, InstantiationException, IllegalAccessException,
